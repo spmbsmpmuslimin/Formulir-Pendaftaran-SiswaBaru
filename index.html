@@ -13,64 +13,123 @@
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #1e7e34 0%, #28a745 100%);
+        background: linear-gradient(
+          135deg,
+          #0891b2 0%,
+          #06b6d4 50%,
+          #10b981 100%
+        );
         min-height: 100vh;
         padding: 20px;
       }
 
       .container {
-        max-width: 800px;
+        max-width: 900px;
         margin: 0 auto;
         background: white;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        border-radius: 24px;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
         overflow: hidden;
       }
 
       .header {
-        background: linear-gradient(135deg, #1e7e34 0%, #28a745 100%);
+        background: linear-gradient(
+          135deg,
+          #0284c7 0%,
+          #0891b2 50%,
+          #059669 100%
+        );
         color: white;
-        padding: 40px;
+        padding: 50px 40px;
         text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 70%
+        );
+        animation: float 15s infinite ease-in-out;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        50% {
+          transform: translate(-20px, -20px) rotate(180deg);
+        }
       }
 
       .header .organization {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 600;
-        margin-bottom: 5px;
-        letter-spacing: 0.5px;
-      }
-
-      .header .school-name {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 25px;
-        letter-spacing: 1px;
-      }
-
-      .header h1 {
-        font-size: 28px;
         margin-bottom: 8px;
-        font-weight: 600;
-      }
-
-      .header .academic-year {
-        font-size: 20px;
-        font-weight: 600;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 1;
+        text-transform: uppercase;
         opacity: 0.95;
       }
 
+      .header .school-name {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        letter-spacing: 0.5px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .header h1 {
+        font-size: 32px;
+        margin-bottom: 12px;
+        font-weight: 700;
+        position: relative;
+        z-index: 1;
+      }
+
+      .header .academic-year {
+        font-size: 22px;
+        font-weight: 600;
+        opacity: 0.95;
+        position: relative;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.15);
+        display: inline-block;
+        padding: 8px 24px;
+        border-radius: 20px;
+        margin-top: 10px;
+      }
+
       .form-container {
-        padding: 40px;
+        padding: 50px;
+        background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
       }
 
       .section-title {
-        font-size: 20px;
-        color: #28a745;
-        margin: 30px 0 20px 0;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #28a745;
-        font-weight: 600;
+        font-size: 22px;
+        color: #0891b2;
+        margin: 40px 0 25px 0;
+        padding: 18px 24px;
+        background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%);
+        border-radius: 16px;
+        border-left: 5px solid #0891b2;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 4px 6px rgba(8, 145, 178, 0.1);
       }
 
       .section-title:first-child {
@@ -78,143 +137,217 @@
       }
 
       .form-group {
-        margin-bottom: 20px;
+        margin-bottom: 24px;
       }
 
       .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      .form-row-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 20px;
+        margin-bottom: 24px;
       }
 
       label {
         display: block;
-        margin-bottom: 8px;
-        color: #333;
-        font-weight: 500;
+        margin-bottom: 10px;
+        color: #1e293b;
+        font-weight: 600;
         font-size: 14px;
       }
 
       label .required {
-        color: #e74c3c;
+        color: #ef4444;
+        font-weight: 700;
       }
 
       input,
       select,
       textarea {
         width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 14px;
+        padding: 14px 18px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 15px;
         transition: all 0.3s;
         font-family: inherit;
+        background: white;
       }
 
       input:focus,
       select:focus,
       textarea:focus {
         outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #0891b2;
+        box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.12);
+        background: #f0fdfa;
+      }
+
+      input:hover,
+      select:hover,
+      textarea:hover {
+        border-color: #0891b2;
       }
 
       textarea {
         resize: vertical;
-        min-height: 100px;
+        min-height: 120px;
+        line-height: 1.6;
       }
 
       .radio-group {
         display: flex;
-        gap: 20px;
-        margin-top: 8px;
+        gap: 24px;
+        margin-top: 12px;
       }
 
       .radio-option {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
+        padding: 12px 20px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: white;
+      }
+
+      .radio-option:hover {
+        border-color: #0891b2;
+        background: #f0fdfa;
       }
 
       .radio-option input[type="radio"] {
         width: auto;
         margin: 0;
+        cursor: pointer;
+        accent-color: #0891b2;
+      }
+
+      .radio-option input[type="radio"]:checked + label {
+        color: #0891b2;
+        font-weight: 600;
+      }
+
+      .radio-option label {
+        margin: 0;
+        cursor: pointer;
       }
 
       .btn-submit {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
         color: white;
-        padding: 15px 40px;
+        padding: 18px 40px;
         border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
+        border-radius: 14px;
+        font-size: 18px;
+        font-weight: 700;
         cursor: pointer;
         width: 100%;
-        margin-top: 30px;
-        transition: transform 0.2s, box-shadow 0.2s;
+        margin-top: 40px;
+        transition: all 0.3s;
+        box-shadow: 0 8px 20px rgba(8, 145, 178, 0.3);
+        letter-spacing: 0.5px;
       }
 
       .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 28px rgba(8, 145, 178, 0.4);
       }
 
       .btn-submit:active {
-        transform: translateY(0);
+        transform: translateY(-1px);
       }
 
       .btn-submit:disabled {
         opacity: 0.6;
         cursor: not-allowed;
+        transform: none;
       }
 
       .success-message {
         display: none;
-        background: #d4edda;
-        border: 1px solid #c3e6cb;
-        color: #155724;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+        background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+        border: 2px solid #059669;
+        color: #065f46;
+        padding: 20px;
+        border-radius: 14px;
+        margin-bottom: 30px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
       }
 
       .error-message {
         display: none;
-        background: #f8d7da;
-        border: 1px solid #f5c6cb;
-        color: #721c24;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        border: 2px solid #ef4444;
+        color: #991b1b;
+        padding: 20px;
+        border-radius: 14px;
+        margin-bottom: 30px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
       }
 
       @media (max-width: 768px) {
-        .form-row {
+        .form-row,
+        .form-row-3 {
           grid-template-columns: 1fr;
         }
 
         .form-container {
-          padding: 20px;
-        }
-
-        .header {
           padding: 30px 20px;
         }
 
+        .header {
+          padding: 40px 20px;
+        }
+
         .header h1 {
-          font-size: 24px;
+          font-size: 26px;
+        }
+
+        .header .school-name {
+          font-size: 20px;
+        }
+
+        .section-title {
+          font-size: 18px;
+          padding: 14px 18px;
         }
       }
 
       .info-box {
-        background: #e3f2fd;
-        border-left: 4px solid #2196f3;
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 4px;
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border-left: 5px solid #3b82f6;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 12px;
         font-size: 14px;
-        color: #1976d2;
+        color: #1e40af;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
+      }
+
+      .info-box strong {
+        color: #1e3a8a;
+        font-size: 15px;
+      }
+
+      .card-section {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
       }
     </style>
   </head>
@@ -229,10 +362,10 @@
 
       <div class="form-container">
         <div class="info-box">
-          <strong>Petunjuk:</strong> Isi semua data yang bertanda (<span
-            style="color: #e74c3c"
-            >*</span
-          >) wajib diisi. Pastikan data yang Anda masukkan sudah benar.
+          <strong>📋 Petunjuk Pengisian:</strong> Isi semua data yang bertanda
+          (<span style="color: #ef4444; font-weight: 700">*</span>) wajib diisi.
+          Pastikan data yang Anda masukkan sudah benar dan sesuai dengan dokumen
+          resmi.
         </div>
 
         <div class="success-message" id="successMessage">
@@ -244,180 +377,194 @@
 
         <form id="registrationForm">
           <!-- Data Siswa -->
-          <div class="section-title">📋 Data Siswa</div>
+          <div class="card-section">
+            <div class="section-title">👤 Data Pribadi Siswa</div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label>Nama Lengkap <span class="required">*</span></label>
-              <input
-                type="text"
-                id="nama_lengkap"
-                name="nama_lengkap"
-                required
-                placeholder="Masukkan nama lengkap" />
-            </div>
-
-            <div class="form-group">
-              <label>NISN <span class="required">*</span></label>
-              <input
-                type="text"
-                id="nisn"
-                name="nisn"
-                required
-                placeholder="10 digit NISN"
-                maxlength="10" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Jenis Kelamin <span class="required">*</span></label>
-            <div class="radio-group">
-              <div class="radio-option">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nama Lengkap <span class="required">*</span></label>
                 <input
-                  type="radio"
-                  id="laki"
-                  name="jenis_kelamin"
-                  value="Laki-laki"
-                  required />
-                <label for="laki" style="margin: 0">Laki-laki</label>
+                  type="text"
+                  id="nama_lengkap"
+                  name="nama_lengkap"
+                  required
+                  placeholder="Masukkan nama lengkap sesuai akta" />
               </div>
-              <div class="radio-option">
+
+              <div class="form-group">
+                <label>NISN <span class="required">*</span></label>
                 <input
-                  type="radio"
-                  id="perempuan"
-                  name="jenis_kelamin"
-                  value="Perempuan"
-                  required />
-                <label for="perempuan" style="margin: 0">Perempuan</label>
+                  type="text"
+                  id="nisn"
+                  name="nisn"
+                  required
+                  placeholder="10 digit NISN"
+                  maxlength="10" />
               </div>
             </div>
-          </div>
 
-          <div class="form-row">
             <div class="form-group">
-              <label>Tempat Lahir <span class="required">*</span></label>
+              <label>Jenis Kelamin <span class="required">*</span></label>
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input
+                    type="radio"
+                    id="laki"
+                    name="jenis_kelamin"
+                    value="Laki-laki"
+                    required />
+                  <label for="laki">👦 Laki-laki</label>
+                </div>
+                <div class="radio-option">
+                  <input
+                    type="radio"
+                    id="perempuan"
+                    name="jenis_kelamin"
+                    value="Perempuan"
+                    required />
+                  <label for="perempuan">👧 Perempuan</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Tempat Lahir <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="tempat_lahir"
+                  name="tempat_lahir"
+                  required
+                  placeholder="Contoh: Bandung" />
+              </div>
+
+              <div class="form-group">
+                <label>Tanggal Lahir <span class="required">*</span></label>
+                <input
+                  type="date"
+                  id="tanggal_lahir"
+                  name="tanggal_lahir"
+                  required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Asal Sekolah (SD) <span class="required">*</span></label>
               <input
                 type="text"
-                id="tempat_lahir"
-                name="tempat_lahir"
+                id="asal_sekolah"
+                name="asal_sekolah"
                 required
-                placeholder="Kota kelahiran" />
+                placeholder="Contoh: SD Negeri 1 Cililin" />
             </div>
 
             <div class="form-group">
-              <label>Tanggal Lahir <span class="required">*</span></label>
-              <input
-                type="date"
-                id="tanggal_lahir"
-                name="tanggal_lahir"
-                required />
+              <label>Alamat Lengkap <span class="required">*</span></label>
+              <textarea
+                id="alamat"
+                name="alamat"
+                required
+                placeholder="Masukkan alamat lengkap (Jalan, RT/RW, Desa/Kelurahan, Kecamatan, Kabupaten)"></textarea>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label>Asal Sekolah <span class="required">*</span></label>
-            <input
-              type="text"
-              id="asal_sekolah"
-              name="asal_sekolah"
-              required
-              placeholder="Nama sekolah sebelumnya" />
-          </div>
-
-          <div class="form-group">
-            <label>Alamat Lengkap <span class="required">*</span></label>
-            <textarea
-              id="alamat"
-              name="alamat"
-              required
-              placeholder="Masukkan alamat lengkap"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>No. HP/WhatsApp <span class="required">*</span></label>
-            <input
-              type="tel"
-              id="no_hp"
-              name="no_hp"
-              required
-              placeholder="08xxxxxxxxxx" />
+            <div class="form-group">
+              <label>No. HP/WhatsApp <span class="required">*</span></label>
+              <input
+                type="tel"
+                id="no_hp"
+                name="no_hp"
+                required
+                placeholder="Contoh: 081234567890" />
+            </div>
           </div>
 
           <!-- Data Orang Tua - Ayah -->
-          <div class="section-title">👨‍👦 Data Ayah</div>
+          <div class="card-section">
+            <div class="section-title">👨‍👦 Data Ayah Kandung</div>
 
-          <div class="form-group">
-            <label>Nama Ayah <span class="required">*</span></label>
-            <input
-              type="text"
-              id="nama_ayah"
-              name="nama_ayah"
-              required
-              placeholder="Nama lengkap ayah" />
-          </div>
-
-          <div class="form-row">
             <div class="form-group">
-              <label>Pekerjaan Ayah <span class="required">*</span></label>
+              <label>Nama Lengkap Ayah <span class="required">*</span></label>
               <input
                 type="text"
-                id="pekerjaan_ayah"
-                name="pekerjaan_ayah"
+                id="nama_ayah"
+                name="nama_ayah"
                 required
-                placeholder="Pekerjaan ayah" />
+                placeholder="Masukkan nama lengkap ayah kandung" />
             </div>
 
-            <div class="form-group">
-              <label>Pendidikan Ayah <span class="required">*</span></label>
-              <select id="pendidikan_ayah" name="pendidikan_ayah" required>
-                <option value="">Pilih Pendidikan</option>
-                <option value="SD">SD</option>
-                <option value="SMP">SMP</option>
-                <option value="SMA/SMK">SMA/SMK</option>
-                <option value="D3">D3</option>
-                <option value="S1">S1</option>
-                <option value="S2">S2</option>
-                <option value="Tidak Sekolah">Tidak Sekolah</option>
-              </select>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Pekerjaan Ayah <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="pekerjaan_ayah"
+                  name="pekerjaan_ayah"
+                  required
+                  placeholder="Contoh: Wiraswasta, PNS, Petani" />
+              </div>
+
+              <div class="form-group">
+                <label
+                  >Pendidikan Terakhir Ayah
+                  <span class="required">*</span></label
+                >
+                <select id="pendidikan_ayah" name="pendidikan_ayah" required>
+                  <option value="">-- Pilih Pendidikan --</option>
+                  <option value="Tidak Sekolah">Tidak Sekolah</option>
+                  <option value="SD">SD/Sederajat</option>
+                  <option value="SMP">SMP/Sederajat</option>
+                  <option value="SMA/SMK">SMA/SMK/Sederajat</option>
+                  <option value="D3">Diploma (D1/D2/D3)</option>
+                  <option value="S1">Sarjana (S1)</option>
+                  <option value="S2">Magister (S2)</option>
+                  <option value="S3">Doktor (S3)</option>
+                </select>
+              </div>
             </div>
           </div>
 
           <!-- Data Orang Tua - Ibu -->
-          <div class="section-title">👩‍👦 Data Ibu</div>
+          <div class="card-section">
+            <div class="section-title">👩‍👦 Data Ibu Kandung</div>
 
-          <div class="form-group">
-            <label>Nama Ibu <span class="required">*</span></label>
-            <input
-              type="text"
-              id="nama_ibu"
-              name="nama_ibu"
-              required
-              placeholder="Nama lengkap ibu" />
-          </div>
-
-          <div class="form-row">
             <div class="form-group">
-              <label>Pekerjaan Ibu <span class="required">*</span></label>
+              <label>Nama Lengkap Ibu <span class="required">*</span></label>
               <input
                 type="text"
-                id="pekerjaan_ibu"
-                name="pekerjaan_ibu"
+                id="nama_ibu"
+                name="nama_ibu"
                 required
-                placeholder="Pekerjaan ibu" />
+                placeholder="Masukkan nama lengkap ibu kandung" />
             </div>
 
-            <div class="form-group">
-              <label>Pendidikan Ibu <span class="required">*</span></label>
-              <select id="pendidikan_ibu" name="pendidikan_ibu" required>
-                <option value="">Pilih Pendidikan</option>
-                <option value="SD">SD</option>
-                <option value="SMP">SMP</option>
-                <option value="SMA/SMK">SMA/SMK</option>
-                <option value="D3">D3</option>
-                <option value="S1">S1</option>
-                <option value="S2">S2</option>
-                <option value="Tidak Sekolah">Tidak Sekolah</option>
-              </select>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Pekerjaan Ibu <span class="required">*</span></label>
+                <input
+                  type="text"
+                  id="pekerjaan_ibu"
+                  name="pekerjaan_ibu"
+                  required
+                  placeholder="Contoh: Ibu Rumah Tangga, Guru, Pedagang" />
+              </div>
+
+              <div class="form-group">
+                <label
+                  >Pendidikan Terakhir Ibu
+                  <span class="required">*</span></label
+                >
+                <select id="pendidikan_ibu" name="pendidikan_ibu" required>
+                  <option value="">-- Pilih Pendidikan --</option>
+                  <option value="Tidak Sekolah">Tidak Sekolah</option>
+                  <option value="SD">SD/Sederajat</option>
+                  <option value="SMP">SMP/Sederajat</option>
+                  <option value="SMA/SMK">SMA/SMK/Sederajat</option>
+                  <option value="D3">Diploma (D1/D2/D3)</option>
+                  <option value="S1">Sarjana (S1)</option>
+                  <option value="S2">Magister (S2)</option>
+                  <option value="S3">Doktor (S3)</option>
+                </select>
+              </div>
             </div>
           </div>
 
