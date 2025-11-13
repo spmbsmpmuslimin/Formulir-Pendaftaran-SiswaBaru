@@ -147,13 +147,6 @@
         margin-bottom: 24px;
       }
 
-      .form-row-3 {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 20px;
-        margin-bottom: 24px;
-      }
-
       label {
         display: block;
         margin-bottom: 10px;
@@ -241,6 +234,23 @@
         cursor: pointer;
       }
 
+      .input-lainnya {
+        display: none;
+        margin-top: 10px;
+        animation: slideDown 0.3s ease;
+      }
+
+      @keyframes slideDown {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       .btn-submit {
         background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
         color: white;
@@ -297,8 +307,7 @@
       }
 
       @media (max-width: 768px) {
-        .form-row,
-        .form-row-3 {
+        .form-row {
           grid-template-columns: 1fr;
         }
 
@@ -495,12 +504,30 @@
             <div class="form-row">
               <div class="form-group">
                 <label>Pekerjaan Ayah <span class="required">*</span></label>
+                <select id="pekerjaan_ayah" name="pekerjaan_ayah" required>
+                  <option value="">-- Pilih Pekerjaan --</option>
+                  <option value="PNS/TNI/Polri">PNS/TNI/Polri</option>
+                  <option value="Karyawan Swasta">Karyawan Swasta</option>
+                  <option value="Wiraswasta/Pedagang">
+                    Wiraswasta/Pedagang
+                  </option>
+                  <option value="Petani">Petani</option>
+                  <option value="Buruh">Buruh</option>
+                  <option value="Guru/Dosen">Guru/Dosen</option>
+                  <option value="Dokter/Tenaga Kesehatan">
+                    Dokter/Tenaga Kesehatan
+                  </option>
+                  <option value="Sopir/Driver">Sopir/Driver</option>
+                  <option value="Pensiunan">Pensiunan</option>
+                  <option value="Tidak Bekerja">Tidak Bekerja</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
                 <input
                   type="text"
-                  id="pekerjaan_ayah"
-                  name="pekerjaan_ayah"
-                  required
-                  placeholder="Contoh: Wiraswasta, PNS, Petani" />
+                  id="pekerjaan_ayah_lainnya"
+                  name="pekerjaan_ayah_lainnya"
+                  class="input-lainnya"
+                  placeholder="Sebutkan pekerjaan lainnya" />
               </div>
 
               <div class="form-group">
@@ -517,7 +544,6 @@
                   <option value="D3">Diploma (D1/D2/D3)</option>
                   <option value="S1">Sarjana (S1)</option>
                   <option value="S2">Magister (S2)</option>
-                  <option value="S3">Doktor (S3)</option>
                 </select>
               </div>
             </div>
@@ -540,12 +566,30 @@
             <div class="form-row">
               <div class="form-group">
                 <label>Pekerjaan Ibu <span class="required">*</span></label>
+                <select id="pekerjaan_ibu" name="pekerjaan_ibu" required>
+                  <option value="">-- Pilih Pekerjaan --</option>
+                  <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                  <option value="PNS/TNI/Polri">PNS/TNI/Polri</option>
+                  <option value="Karyawan Swasta">Karyawan Swasta</option>
+                  <option value="Wiraswasta/Pedagang">
+                    Wiraswasta/Pedagang
+                  </option>
+                  <option value="Petani">Petani</option>
+                  <option value="Buruh">Buruh</option>
+                  <option value="Guru/Dosen">Guru/Dosen</option>
+                  <option value="Dokter/Tenaga Kesehatan">
+                    Dokter/Tenaga Kesehatan
+                  </option>
+                  <option value="Pensiunan">Pensiunan</option>
+                  <option value="Tidak Bekerja">Tidak Bekerja</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
                 <input
                   type="text"
-                  id="pekerjaan_ibu"
-                  name="pekerjaan_ibu"
-                  required
-                  placeholder="Contoh: Ibu Rumah Tangga, Guru, Pedagang" />
+                  id="pekerjaan_ibu_lainnya"
+                  name="pekerjaan_ibu_lainnya"
+                  class="input-lainnya"
+                  placeholder="Sebutkan pekerjaan lainnya" />
               </div>
 
               <div class="form-group">
@@ -562,7 +606,6 @@
                   <option value="D3">Diploma (D1/D2/D3)</option>
                   <option value="S1">Sarjana (S1)</option>
                   <option value="S2">Magister (S2)</option>
-                  <option value="S3">Doktor (S3)</option>
                 </select>
               </div>
             </div>
@@ -577,6 +620,38 @@
       const SUPABASE_URL = "https://enzohhulskcwniosqtnt.supabase.co";
       const SUPABASE_ANON_KEY =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuem9oaHVsc2tjd25pb3NxdG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNjY4OTgsImV4cCI6MjA3Mzg0Mjg5OH0.32dpWJR55BA_ROrGAd9KxE22X4wVGLRWQ2VGUFG0NKQ";
+
+      // Handle dropdown pekerjaan ayah
+      document
+        .getElementById("pekerjaan_ayah")
+        .addEventListener("change", function (e) {
+          const lainnyaInput = document.getElementById(
+            "pekerjaan_ayah_lainnya"
+          );
+          if (e.target.value === "Lainnya") {
+            lainnyaInput.style.display = "block";
+            lainnyaInput.required = true;
+          } else {
+            lainnyaInput.style.display = "none";
+            lainnyaInput.required = false;
+            lainnyaInput.value = "";
+          }
+        });
+
+      // Handle dropdown pekerjaan ibu
+      document
+        .getElementById("pekerjaan_ibu")
+        .addEventListener("change", function (e) {
+          const lainnyaInput = document.getElementById("pekerjaan_ibu_lainnya");
+          if (e.target.value === "Lainnya") {
+            lainnyaInput.style.display = "block";
+            lainnyaInput.required = true;
+          } else {
+            lainnyaInput.style.display = "none";
+            lainnyaInput.required = false;
+            lainnyaInput.value = "";
+          }
+        });
 
       document
         .getElementById("registrationForm")
@@ -611,6 +686,9 @@
           submitBtn.disabled = true;
           submitBtn.textContent = "⏳ Sedang Memproses...";
 
+          const pekerjaanAyah = document.getElementById("pekerjaan_ayah").value;
+          const pekerjaanIbu = document.getElementById("pekerjaan_ibu").value;
+
           const formData = {
             nama_lengkap: document.getElementById("nama_lengkap").value,
             nisn: nisn,
@@ -621,10 +699,16 @@
             tanggal_lahir: document.getElementById("tanggal_lahir").value,
             asal_sekolah: document.getElementById("asal_sekolah").value,
             nama_ayah: document.getElementById("nama_ayah").value,
-            pekerjaan_ayah: document.getElementById("pekerjaan_ayah").value,
+            pekerjaan_ayah:
+              pekerjaanAyah === "Lainnya"
+                ? document.getElementById("pekerjaan_ayah_lainnya").value
+                : pekerjaanAyah,
             pendidikan_ayah: document.getElementById("pendidikan_ayah").value,
             nama_ibu: document.getElementById("nama_ibu").value,
-            pekerjaan_ibu: document.getElementById("pekerjaan_ibu").value,
+            pekerjaan_ibu:
+              pekerjaanIbu === "Lainnya"
+                ? document.getElementById("pekerjaan_ibu_lainnya").value
+                : pekerjaanIbu,
             pendidikan_ibu: document.getElementById("pendidikan_ibu").value,
             no_hp: noHp,
             alamat: document.getElementById("alamat").value,
