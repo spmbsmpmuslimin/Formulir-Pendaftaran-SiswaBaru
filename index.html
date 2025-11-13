@@ -578,14 +578,6 @@
       const SUPABASE_ANON_KEY =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuem9oaHVsc2tjd25pb3NxdG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNjY4OTgsImV4cCI6MjA3Mzg0Mjg5OH0.32dpWJR55BA_ROrGAd9KxE22X4wVGLRWQ2VGUFG0NKQ";
 
-      function generateRegistrationNumber() {
-        const year = new Date().getFullYear();
-        const random = Math.floor(Math.random() * 10000)
-          .toString()
-          .padStart(4, "0");
-        return `PSB${year}${random}`;
-      }
-
       document
         .getElementById("registrationForm")
         .addEventListener("submit", async function (e) {
@@ -616,13 +608,10 @@
             return;
           }
 
-          const regNumber = generateRegistrationNumber();
-
           submitBtn.disabled = true;
           submitBtn.textContent = "⏳ Sedang Memproses...";
 
           const formData = {
-            no_pendaftaran: regNumber,
             nama_lengkap: document.getElementById("nama_lengkap").value,
             nisn: nisn,
             jenis_kelamin: document.querySelector(
@@ -669,7 +658,7 @@
 
             const data = await response.json();
 
-            regNumberEl.textContent = regNumber;
+            regNumberEl.textContent = data[0].no_pendaftaran;
             successMsg.style.display = "block";
             successMsg.scrollIntoView({ behavior: "smooth", block: "center" });
 
