@@ -164,6 +164,11 @@
         transform: translateY(0);
       }
 
+      .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
       .success-message {
         display: none;
         background: #d4edda;
@@ -422,145 +427,126 @@
     </div>
 
     <script>
-            // ============================================
-            // SUPABASE CONFIGURATION
-            // Ganti dengan credentials Supabase lu
-            // ============================================
-            const SUPABASE_URL = "https://enzohhulskcwniosqtnt.supabase.co";
-            const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuem9oaHVsc2tjd25pb3NxdG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNjY4OTgsImV4cCI6MjA3Mzg0Mjg5OH0.32dpWJR55BA_ROrGAd9KxE22X4wVGLRWQ2VGUFG0NKQ
-      ";
-            // ============================================
+      const SUPABASE_URL = "https://enzohhulskcwniosqtnt.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVuem9oaHVsc2tjd25pb3NxdG50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgyNjY4OTgsImV4cCI6MjA3Mzg0Mjg5OH0.32dpWJR55BA_ROrGAd9KxE22X4wVGLRWQ2VGUFG0NKQ";
 
-            // Generate nomor pendaftaran
-            function generateRegistrationNumber() {
-              const year = new Date().getFullYear();
-              const random = Math.floor(Math.random() * 10000)
-                .toString()
-                .padStart(4, "0");
-              return `PSB${year}${random}`;
+      function generateRegistrationNumber() {
+        const year = new Date().getFullYear();
+        const random = Math.floor(Math.random() * 10000)
+          .toString()
+          .padStart(4, "0");
+        return `PSB${year}${random}`;
+      }
+
+      document
+        .getElementById("registrationForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const successMsg = document.getElementById("successMessage");
+          const errorMsg = document.getElementById("errorMessage");
+          const regNumberEl = document.getElementById("regNumber");
+          const submitBtn = e.target.querySelector(".btn-submit");
+
+          successMsg.style.display = "none";
+          errorMsg.style.display = "none";
+
+          const nisn = document.getElementById("nisn").value;
+          if (nisn.length !== 10 || !/^\d+$/.test(nisn)) {
+            errorMsg.textContent = "❌ NISN harus berisi 10 digit angka!";
+            errorMsg.style.display = "block";
+            errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+
+          const noHp = document.getElementById("no_hp").value;
+          if (!/^08\d{8,11}$/.test(noHp)) {
+            errorMsg.textContent =
+              "❌ Nomor HP tidak valid! Harus dimulai dengan 08 dan 10-13 digit.";
+            errorMsg.style.display = "block";
+            errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+
+          const regNumber = generateRegistrationNumber();
+
+          submitBtn.disabled = true;
+          submitBtn.textContent = "⏳ Sedang Memproses...";
+
+          const formData = {
+            no_pendaftaran: regNumber,
+            nama_lengkap: document.getElementById("nama_lengkap").value,
+            nisn: nisn,
+            jenis_kelamin: document.querySelector(
+              'input[name="jenis_kelamin"]:checked'
+            ).value,
+            tempat_lahir: document.getElementById("tempat_lahir").value,
+            tanggal_lahir: document.getElementById("tanggal_lahir").value,
+            asal_sekolah: document.getElementById("asal_sekolah").value,
+            nama_ayah: document.getElementById("nama_ayah").value,
+            pekerjaan_ayah: document.getElementById("pekerjaan_ayah").value,
+            pendidikan_ayah: document.getElementById("pendidikan_ayah").value,
+            nama_ibu: document.getElementById("nama_ibu").value,
+            pekerjaan_ibu: document.getElementById("pekerjaan_ibu").value,
+            pendidikan_ibu: document.getElementById("pendidikan_ibu").value,
+            no_hp: noHp,
+            alamat: document.getElementById("alamat").value,
+            academic_year: "2026/2027",
+            status: "pending",
+            is_transferred: false,
+            tanggal_daftar: new Date().toISOString().split("T")[0],
+            kelas: null,
+            transferred_at: null,
+            transferred_by: null,
+          };
+
+          try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/siswa_baru`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                apikey: SUPABASE_ANON_KEY,
+                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                Prefer: "return=representation",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+              const error = await response.json();
+              throw new Error(
+                error.message || "Terjadi kesalahan saat menyimpan data"
+              );
             }
 
-            // Handle form submission
-            document
-              .getElementById("registrationForm")
-              .addEventListener("submit", async function (e) {
-                e.preventDefault();
+            const data = await response.json();
 
-                const successMsg = document.getElementById("successMessage");
-                const errorMsg = document.getElementById("errorMessage");
-                const regNumberEl = document.getElementById("regNumber");
-                const submitBtn = e.target.querySelector(".btn-submit");
+            regNumberEl.textContent = regNumber;
+            successMsg.style.display = "block";
+            successMsg.scrollIntoView({ behavior: "smooth", block: "center" });
 
-                // Hide messages
-                successMsg.style.display = "none";
-                errorMsg.style.display = "none";
+            this.reset();
 
-                // Validate NISN (harus 10 digit)
-                const nisn = document.getElementById("nisn").value;
-                if (nisn.length !== 10 || !/^\d+$/.test(nisn)) {
-                  errorMsg.textContent = "❌ NISN harus berisi 10 digit angka!";
-                  errorMsg.style.display = "block";
-                  errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
-                  return;
-                }
+            console.log("Data berhasil disimpan:", data);
+          } catch (error) {
+            console.error("Error:", error);
+            errorMsg.textContent = "❌ Terjadi kesalahan! " + error.message;
+            errorMsg.style.display = "block";
+            errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "📝 Daftar Sekarang";
+          }
+        });
 
-                // Validate phone number
-                const noHp = document.getElementById("no_hp").value;
-                if (!/^08\d{8,11}$/.test(noHp)) {
-                  errorMsg.textContent =
-                    "❌ Nomor HP tidak valid! Harus dimulai dengan 08 dan 10-13 digit.";
-                  errorMsg.style.display = "block";
-                  errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
-                  return;
-                }
+      document.getElementById("nisn").addEventListener("input", function (e) {
+        this.value = this.value.replace(/\D/g, "");
+      });
 
-                // Generate registration number
-                const regNumber = generateRegistrationNumber();
-
-                // Disable submit button
-                submitBtn.disabled = true;
-                submitBtn.textContent = "⏳ Sedang Memproses...";
-
-                // Collect form data
-                const formData = {
-                  no_pendaftaran: regNumber,
-                  nama_lengkap: document.getElementById("nama_lengkap").value,
-                  nisn: nisn,
-                  jenis_kelamin: document.querySelector(
-                    'input[name="jenis_kelamin"]:checked'
-                  ).value,
-                  tempat_lahir: document.getElementById("tempat_lahir").value,
-                  tanggal_lahir: document.getElementById("tanggal_lahir").value,
-                  asal_sekolah: document.getElementById("asal_sekolah").value,
-                  nama_ayah: document.getElementById("nama_ayah").value,
-                  pekerjaan_ayah: document.getElementById("pekerjaan_ayah").value,
-                  pendidikan_ayah: document.getElementById("pendidikan_ayah").value,
-                  nama_ibu: document.getElementById("nama_ibu").value,
-                  pekerjaan_ibu: document.getElementById("pekerjaan_ibu").value,
-                  pendidikan_ibu: document.getElementById("pendidikan_ibu").value,
-                  no_hp: noHp,
-                  alamat: document.getElementById("alamat").value,
-                  academic_year: "2026/2027", // Fixed value
-                  status: "pending",
-                  is_transferred: false,
-                  tanggal_daftar: new Date().toISOString().split("T")[0],
-                  kelas: null,
-                  transferred_at: null,
-                  transferred_by: null,
-                };
-
-                try {
-                  // Send data to Supabase
-                  const response = await fetch(`${SUPABASE_URL}/rest/v1/siswa_baru`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      apikey: SUPABASE_ANON_KEY,
-                      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-                      Prefer: "return=representation",
-                    },
-                    body: JSON.stringify(formData),
-                  });
-
-                  if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(
-                      error.message || "Terjadi kesalahan saat menyimpan data"
-                    );
-                  }
-
-                  const data = await response.json();
-
-                  // Show success message
-                  regNumberEl.textContent = regNumber;
-                  successMsg.style.display = "block";
-                  successMsg.scrollIntoView({ behavior: "smooth", block: "center" });
-
-                  // Reset form
-                  this.reset();
-
-                  console.log("Data berhasil disimpan:", data);
-                } catch (error) {
-                  console.error("Error:", error);
-                  errorMsg.textContent = "❌ Terjadi kesalahan! " + error.message;
-                  errorMsg.style.display = "block";
-                  errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
-                } finally {
-                  // Re-enable submit button
-                  submitBtn.disabled = false;
-                  submitBtn.textContent = "📝 Daftar Sekarang";
-                }
-              });
-
-            // Validate NISN input (only numbers)
-            document.getElementById("nisn").addEventListener("input", function (e) {
-              this.value = this.value.replace(/\D/g, "");
-            });
-
-            // Validate phone number input (only numbers)
-            document.getElementById("no_hp").addEventListener("input", function (e) {
-              this.value = this.value.replace(/\D/g, "");
-            });
+      document.getElementById("no_hp").addEventListener("input", function (e) {
+        this.value = this.value.replace(/\D/g, "");
+      });
     </script>
   </body>
 </html>
