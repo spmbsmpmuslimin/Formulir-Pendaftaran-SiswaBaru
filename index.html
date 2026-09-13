@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pendaftaran Siswa Baru - SMP Muslimin Cililin</title>
+    <title>Formulir Kelengkapan Data Siswa Baru - SMP Muslimin Cililin</title>
     <style>
       * {
         margin: 0;
@@ -549,7 +549,7 @@
       <div class="header">
         <div class="organization">YAYASAN PENDIDIKAN NURUL ULUM (YPNU)</div>
         <div class="school-name">SEKOLAH MENENGAH PERTAMA MUSLIMIN CILILIN</div>
-        <h1>Formulir Pendaftaran Siswa Baru</h1>
+        <h1>Formulir Kelengkapan Data Siswa Baru</h1>
         <div class="academic-year" id="headerAcademicYear">
           <div
             class="loading-spinner"
@@ -806,7 +806,7 @@
               <button type="button" class="btn btn-reset" onclick="resetForm()">
                 🔄 Reset Form
               </button>
-              <button type="submit" class="btn btn-submit">📝 Daftar Sekarang</button>
+              <button type="submit" class="btn btn-submit">💾 Simpan Sekarang</button>
             </div>
           </form>
         </div>
@@ -937,11 +937,43 @@
         e.target.value = e.target.value.replace(/\D/g, "");
       });
 
+      // Cek apakah data siswa ini kemungkinan udah pernah disimpan
+      // sebelumnya -- lewat RPC `cek_duplikat_siswa_baru` (cuma balikin
+      // true/false, gak pernah expose data siswa lain). Fail-open: kalau
+      // function ini sendiri error/gak bisa diakses, JANGAN blokir
+      // submit -- biar orang yang emang jujur belum pernah isi gak
+      // keblokir gara-gara masalah teknis di luar kendali mereka.
+      async function cekDuplikatSiswa(nisn, namaLengkap, tanggalLahirIso) {
+        try {
+          const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/cek_duplikat_siswa_baru`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+            },
+            body: JSON.stringify({
+              p_nisn: nisn && nisn.length === 10 ? nisn : null,
+              p_nama_lengkap: namaLengkap,
+              p_tanggal_lahir: tanggalLahirIso,
+            }),
+          });
+          if (!response.ok) {
+            console.warn("cekDuplikatSiswa gagal, lanjut submit tanpa cek:", await response.text());
+            return false;
+          }
+          return await response.json();
+        } catch (err) {
+          console.warn("cekDuplikatSiswa gagal (network), lanjut submit tanpa cek:", err);
+          return false;
+        }
+      }
+
       // =====================================================
       // FORM SUBMIT
       // =====================================================
 
-      document.getElementById("registrationForm").addEventListener("submit", function (e) {
+      document.getElementById("registrationForm").addEventListener("submit", async function (e) {
         e.preventDefault();
 
         const successMsg = document.getElementById("successMessage");
@@ -990,6 +1022,28 @@
         const noHp = document.getElementById("no_hp").value;
         if (!/^(\+62|62|0)[0-9]{9,13}$/.test(noHp.replace(/\s+/g, ""))) {
           errorMsg.textContent = "❌ Format nomor HP tidak valid!";
+          errorMsg.style.display = "block";
+          errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
+          return;
+        }
+
+        // ✅ FIX: cek duplikat SEBELUM munculin modal konfirmasi, biar
+        // siswa yang datanya udah pernah kesimpen gak ke-insert dobel.
+        const [dupDay, dupMonth, dupYear] = tanggalLahir.split("-");
+        const tanggalLahirIsoUntukCek = `${dupYear}-${dupMonth}-${dupDay}`;
+
+        const submitBtnEl = document.querySelector(".btn-submit");
+        submitBtnEl.disabled = true;
+        submitBtnEl.textContent = "🔍 Memeriksa data...";
+
+        const sudahAda = await cekDuplikatSiswa(nisn, namaLengkap, tanggalLahirIsoUntukCek);
+
+        submitBtnEl.disabled = false;
+        submitBtnEl.textContent = "💾 Simpan Sekarang";
+
+        if (sudahAda) {
+          errorMsg.textContent =
+            "❌ Data dengan Nama & Tanggal Lahir (atau NISN) ini kelihatannya sudah pernah disimpan sebelumnya. Kalau ada yang perlu dikoreksi, hubungi TU/Admin sekolah -- jangan isi form ini lagi.";
           errorMsg.style.display = "block";
           errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
           return;
@@ -1074,7 +1128,7 @@
 
           // Success message dengan no_pendaftaran
           successMsg.innerHTML = `
-            ✅ Pendaftaran berhasil! Data <strong>${formData.nama_lengkap}</strong> telah tersimpan.
+            ✅ Data berhasil disimpan! Data <strong>${formData.nama_lengkap}</strong> telah tersimpan.
             <span class="nis-info">📋 No. Pendaftaran: ${
               savedData.no_pendaftaran || "Sedang diproses"
             }</span>
@@ -1093,7 +1147,7 @@
           errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
         } finally {
           submitBtn.disabled = false;
-          submitBtn.textContent = "📝 Daftar Sekarang";
+          submitBtn.textContent = "💾 Simpan Sekarang";
         }
       }
 
