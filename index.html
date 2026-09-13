@@ -839,6 +839,29 @@
       </div>
     </div>
 
+    <div id="duplicateModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>📋 Data Sudah Pernah Disimpan</h2>
+        </div>
+        <div class="modal-body">
+          <p>
+            Data dengan <strong>Nama &amp; Tanggal Lahir</strong> (atau <strong>NISN</strong>) ini
+            kelihatannya <strong>sudah pernah disimpan</strong> sebelumnya.
+          </p>
+          <p style="margin-top: 10px; font-size: 14px; color: #64748b">
+            Kalau ada data yang perlu dikoreksi, hubungi TU/Admin sekolah -- jangan isi form ini
+            lagi ya.
+          </p>
+        </div>
+        <div class="modal-buttons">
+          <button type="button" class="modal-btn modal-btn-confirm" onclick="closeDuplicateModal()">
+            Mengerti
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       // =====================================================
       // 🎓 CONFIG
@@ -1042,10 +1065,7 @@
         submitBtnEl.textContent = "💾 Simpan Sekarang";
 
         if (sudahAda) {
-          errorMsg.textContent =
-            "❌ Data dengan Nama & Tanggal Lahir (atau NISN) ini kelihatannya sudah pernah disimpan sebelumnya. Kalau ada yang perlu dikoreksi, hubungi TU/Admin sekolah -- jangan isi form ini lagi.";
-          errorMsg.style.display = "block";
-          errorMsg.scrollIntoView({ behavior: "smooth", block: "center" });
+          document.getElementById("duplicateModal").style.display = "block";
           return;
         }
 
@@ -1055,6 +1075,10 @@
 
       function closeModal() {
         document.getElementById("confirmModal").style.display = "none";
+      }
+
+      function closeDuplicateModal() {
+        document.getElementById("duplicateModal").style.display = "none";
       }
 
       async function confirmSubmit() {
